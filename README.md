@@ -1,0 +1,69 @@
+# CryptoProg
+
+Практическое задание № 4 — использование криптографических библиотек.
+Библиотека: [Crypto++](https://www.cryptopp.com).
+
+## Структура репозитория
+
+```
+CryptoProg/
+├── hash/          программа хэширования файлов
+│   ├── hash.cpp
+│   ├── Makefile
+│   └── .gitignore
+├── cipher/        программа зашифрования/расшифрования файлов
+│   ├── cipher.cpp
+│   ├── Makefile
+│   └── .gitignore
+└── tests/         файлы для тестирования
+```
+
+## hash — программа хэширования
+
+Алгоритмы: SHA-1, SHA-224, SHA-256 (по умолчанию), SHA-384, SHA-512.
+Результат выводится строкой шестнадцатеричных цифр в нижнем регистре.
+
+Сборка и запуск:
+
+```
+cd hash
+mingw32-make
+.\hash.exe -a sha256 -f ..\tests\test.txt
+```
+
+Пример вывода:
+
+```
+sha256 (..\tests\test.txt) = 49b06b761dc34b9ca0ddef1c98807a4215c9ce279b21aa9dda37deed0e524eb3
+```
+
+## cipher — программа зашифрования/расшифрования
+
+Алгоритм: AES-256 (блочный), режим CBC. Ключ вырабатывается из пароля по схеме
+PBKDF2-HMAC-SHA256 (100 000 итераций, случайная соль 16 байт), для каждого
+зашифрования формируется случайный вектор инициализации IV (16 байт).
+
+Формат зашифрованного файла:
+
+```
+"CPG1" (4 байта) | salt (16 байт) | IV (16 байт) | шифртекст (кратен 16 байтам)
+```
+
+Сборка и запуск:
+
+```
+cd cipher
+mingw32-make
+.\cipher.exe -e -i ..\tests\test.txt -o ..\tests\test.enc -p Student2026
+.\cipher.exe -d -i ..\tests\test.enc -o ..\tests\test.dec -p Student2026
+```
+
+Параметры: `-e/--encrypt` — зашифрование, `-d/--decrypt` — расшифрование,
+`-i/--input` — входной файл, `-o/--output` — файл результата,
+`-p/--password` — пароль. Если пароль не указан, он запрашивается при запуске.
+
+## Сборка
+
+Windows (MinGW / MSYS2): `mingw32-make`, Linux: `make`.
+Библиотека Crypto++: MSYS2 — `pacman -S mingw-w64-ucrt-x86_64-crypto++`,
+Debian/Ubuntu — `apt install libcrypto++-dev`.
