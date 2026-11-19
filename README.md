@@ -67,3 +67,13 @@ mingw32-make
 Windows (MinGW / MSYS2): `mingw32-make`, Linux: `make`.
 Библиотека Crypto++: MSYS2 — `pacman -S mingw-w64-ucrt-x86_64-crypto++`,
 Debian/Ubuntu — `apt install libcrypto++-dev`.
+
+## Результаты проверки
+
+| Что проверялось | Результат |
+|---|---|
+| SHA-256 от `tests/test.txt` совпадает с `certutil -hashfile` | значения совпали |
+| Расшифрованный файл совпадает с исходным (`fc /b`) | различия не найдены |
+| Расшифрование с неверным паролем | ошибка `invalid PKCS #7 block padding found`, код возврата 1 |
+| Хэширование несуществующего файла | сообщение об ошибке, программа не завершается аварийно |
+| Пустой файл (`tests/empty.txt`) | SHA-256 = `e3b0c442...b855`, как по стандарту |
